@@ -1,6 +1,5 @@
-package com.dd.server.generator;
+package com.dd.manager.generator;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
@@ -9,7 +8,6 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
-import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.dd.common.utils.string.StringUtils;
 
 import java.util.ArrayList;
@@ -43,7 +41,7 @@ public class MybatisPlusCodeGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        String projectPath = System.getProperty("user.dir") + "/mall-server";
+        String projectPath = System.getProperty("user.dir") + "/mall-manager";
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("Ivan");
         gc.setFileOverride(false);
@@ -68,7 +66,7 @@ public class MybatisPlusCodeGenerator {
         // 包配置
         PackageConfig pc = new PackageConfig();
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.dd.server.modules");
+        pc.setParent("com.dd.manager.modules");
         pc.setMapper("dao");
         pc.setXml(null);
         mpg.setPackageInfo(pc);
