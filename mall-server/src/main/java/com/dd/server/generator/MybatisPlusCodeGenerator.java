@@ -60,7 +60,6 @@ public class MybatisPlusCodeGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://gz-cdb-omnfkg4j.sql.tencentcdb.com:62135/gs?useUnicode=true&characterEncoding=utf-8");
-        // dsc.setSchemaName("public");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("gs123456");
@@ -82,8 +81,6 @@ public class MybatisPlusCodeGenerator {
             }
         };
 
-        // 如果模板引擎是 freemarker
-//        String templatePath = "/templates/mapper.xml.ftl";
         // 如果模板引擎是 velocity
          String templatePath = "/templates/mapper.xml.vm";
 
@@ -98,18 +95,13 @@ public class MybatisPlusCodeGenerator {
                         + "/" + tableInfo.getMapperName() + StringPool.DOT_XML;
             }
         });
-        /*
-        cfg.setFileCreate(new IFileCreate() {
-            @Override
-            public boolean isCreate(ConfigBuilder configBuilder, FileType fileType, String filePath) {
-                // 判断自定义文件夹是否需要创建
-                checkDir("调用默认方法创建的目录");
-                return false;
-            }
-        });
-        */
         cfg.setFileOutConfigList(focList);
         mpg.setCfg(cfg);
+
+        // 关闭默认xml生成
+        TemplateConfig tc = new TemplateConfig();
+        tc.setXml(null);
+        mpg.setTemplate(tc);
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();

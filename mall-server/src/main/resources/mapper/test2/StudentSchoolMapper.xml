@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dd.server.modules.test2.dao.StudentSchoolMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.dd.server.modules.test2.entity.StudentSchoolEntity">
+        <id column="id" property="id" />
+        <result column="student_id" property="studentId" />
+        <result column="school_info_id" property="schoolInfoId" />
+        <result column="grade_id" property="gradeId" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, student_id, school_info_id, grade_id, create_time
+    </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from tb_student_school
+    </select>
+
+</mapper>

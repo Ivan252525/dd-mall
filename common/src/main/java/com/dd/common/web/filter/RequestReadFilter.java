@@ -41,7 +41,7 @@ public class RequestReadFilter implements Filter {
         }
 
         StringBuilder infoStringBuilder = new StringBuilder();
-        infoStringBuilder.append("Request Info Start:\n")
+        infoStringBuilder.append("\nRequest Info Start:\n")
                 .append("Path: ").append(request.getServletPath()).append("\n")
                 .append("Method: ").append(request.getMethod()).append("\n")
                 .append("ContentType: ").append(request.getContentType()).append("\n")
@@ -49,6 +49,7 @@ public class RequestReadFilter implements Filter {
         if ("application/json".equals(request.getContentType())) {
             infoStringBuilder.append("\nBody: ").append(body);
         }
+        infoStringBuilder.append("\n");
 
         logger.info(infoStringBuilder.toString());
 
