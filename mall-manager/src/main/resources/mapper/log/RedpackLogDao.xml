@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dd.manager.modules.log.dao.RedpackLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.dd.manager.modules.log.entity.RedpackLogEntity" id="redpackLogMap">
+        <result property="id" column="id"/>
+        <result property="openId" column="open_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="productCode" column="product_code"/>
+        <result property="productId" column="product_id"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="totalAmount" column="total_amount"/>
+        <result property="status" column="status"/>
+        <result property="sendTime" column="send_time"/>
+    </resultMap>
+
+	<select id="checkRandom" resultType="int">
+		select count(1) from tb_random t where t.random = #{genRanNum} and t.expire <![CDATA[>=]]> #{now}
+	</select>
+	
+	<update id="insertgenRanNum">
+		insert into tb_random (id,random,expire) values (null,#{genRanNum},#{expire})
+	</update>
+	
+	<select id="selectPage" resultMap="redpackLogMap">
+		select t.* from tb_redpack_log t 
+		
+		
+		order by t.create_time desc
+	</select>
+	
+	<select id="getSendRedPackCount" resultType="java.lang.Integer">
+		select count(1)
+		from tb_redpack_log t
+		where t.status = 3 
+		<if test="endTime != null ">
+			and t.send_time <![CDATA[ <=]]> #{endTime}
+		</if>
+		<if test="beginTime != null ">
+			and t.send_time <![CDATA[ >=]]> #{beginTime}
+		</if>
+		
+	</select>
+	
+	<select id="getSendRedpackAmount" resultType="java.math.BigDecimal">
+		select IFNULL(sum(t.total_amount),0) as total_amount
+		from tb_redpack_log t 
+		where t.status = 3 
+		<if test="endTime != null ">
+			and t.send_time <![CDATA[ <=]]> #{endTime}
+		</if>
+		<if test="beginTime != null ">
+			and t.send_time <![CDATA[ >=]]> #{beginTime}
+		</if>
+	</select>
+	
+	<select id="selectVOList" resultType="com.dd.manager.modules.log.vo.RedpackLogVO">
+		select t.id as id,t.product_code as product_code,
+		t.longitude as longitude,t.latitude as latitude,(t.total_amount / 100) as amount,
+		t.send_time as send_time,
+		case t.status when 1 then '未发送' when 2 then '发送中' when 3 then '已发送' when 4 then '发送失败' when 5 then '已取消' else '未知状态' end as send_status
+		from tb_redpack_log t
+		where 1=1
+		<if test="beginTime != null and beginTime != ''">
+			and t.send_time <![CDATA[ >=]]> #{beginTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and t.send_time <![CDATA[ <=]]> #{endTime}
+		</if>
+		order by t.send_time desc
+	</select>
+</mapper>

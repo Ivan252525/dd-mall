@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dd.manager.modules.log.dao.CheckLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.dd.manager.modules.log.entity.CheckLogEntity" id="checkLogMap">
+        <result property="id" column="id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="createTime" column="create_time"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+    </resultMap>
+
+	<select id="getCheckCount" resultType="java.lang.Integer">
+		select count(1) from tb_check_log t where t.product_code = #{code}
+	</select>
+	
+	<select id="getFirstCheckTime" resultType="java.util.Date">
+		select t.create_time from tb_check_log t where t.product_code = #{code} order by t.create_time asc limit 1
+	</select>
+	
+	<select id="getActiveCheckCount" resultType="java.lang.Integer">
+	select count(1)
+		from
+		(select t.id
+		from tb_check_log t
+		where 1=1
+		<if test="endTime != null ">
+			and t.create_time <![CDATA[ <=]]> #{endTime}
+		</if>
+		<if test="beginTime != null">
+			and t.create_time <![CDATA[ >=]]> #{beginTime}
+		</if>
+		group by t.product_code) temp
+	</select>
+	
+	<select id="getAllCheckCount" resultType="java.lang.Integer">
+		select count(1)
+		from tb_check_log t
+		where 1=1
+		<if test="endTime != null ">
+			and t.create_time <![CDATA[ <=]]> #{endTime}
+		</if>
+		<if test="beginTime != null ">
+			and t.create_time <![CDATA[ >=]]> #{beginTime}
+		</if>
+	</select>
+	
+	<select id="selectVOList" resultType="com.dd.manager.modules.log.vo.CheckLogVO">
+		select t.product_code,
+		(select count(1) from tb_check_log tc1 where tc1.product_code = t.product_code 
+		) as scan_count,
+		(select tc2.create_time from tb_check_log tc2 where tc2.product_code = t.product_code
+		order by tc2.create_time asc limit 1
+		) as first_scan_time,
+		t.create_time as scan_time,t.longitude,t.latitude,tpc.create_time
+		from tb_check_log t
+		left join tb_product_code tpc on t.product_code = tpc.product_code
+		where 1=1
+		<if test="endTime != null and endTime != ''">
+			and t.create_time <![CDATA[ <=]]> #{endTime}
+		</if>
+		<if test="beginTime != null and beginTime != ''">
+			and t.create_time <![CDATA[ >=]]> #{beginTime}
+		</if>
+		<if test="searchType != null and searchType == 1">
+			and tpc.create_time is not null
+		</if>
+		<if test="searchType != null and searchType == 2">
+			and tpc.create_time is null
+		</if>
+		order by scan_time desc
+	</select>
+</mapper>

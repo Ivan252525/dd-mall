@@ -4,7 +4,7 @@ public class ResultUtils {
 
     public static <T> BaseResult<T> success(T data) {
         BaseResult<T> result = new BaseResult<T>();
-        result.setCode(0);
+        result.setCode(200);
         result.setDesc("操作成功");
         result.setData(data);
         return result;
@@ -12,7 +12,7 @@ public class ResultUtils {
 
     public static BaseResult success() {
         BaseResult result = new BaseResult();
-        result.setCode(0);
+        result.setCode(200);
         result.setDesc("操作成功");
         return result;
     }

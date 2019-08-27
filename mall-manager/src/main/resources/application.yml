@@ -1,14 +1,18 @@
 server:
   servlet:
-    context-path: /mall-manager
-  port: 8082
+    context-path: /
+  port: 8081
 
 spring:
+  profiles:
+    active: dev
+  aop:
+    proxy-target-class: true
   mvc:
     throw-exception-if-no-handler-found: true
   datasource:
     name: spring_boot_mybatis
-    url: jdbc:mysql://gz-cdb-omnfkg4j.sql.tencentcdb.com:62135/gs?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
+    url: jdbc:mysql://gz-cdb-omnfkg4j.sql.tencentcdb.com:62135/dd-mall?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false
     username: root
     password: gs123456
     type: com.alibaba.druid.pool.DruidDataSource # 使用druid 数据源
@@ -29,3 +33,30 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:mapper/*/*.xml
   type-aliases-package: com.dd.manager.modules.*.entity
+
+
+#微信公众平台参数（目前为沙箱环境）
+wechat.mp:
+  appId: wx8cd962a9b543703d
+  secret: 87e8eec903d148a42c3d4e3dd7b00bc5
+  token: Hansk880129
+  aesKey: GD6urePfNPJ5CMrUEosA6Y4NUdHvS4jaYSZnQkq00OI
+wx:
+  pay:
+    appId: wx8cd962a9b543703d #微信公众号或者小程序等的appid
+    mchId: 1530848891 #微信支付商户号
+    mchKey: hansk111222333444555666777888999 #微信支付商户密钥
+    key-path: /www/server/redpack/apiclient_cert.p12
+redpack:
+  jwt:
+    secret: fg856ghhhed
+    expire: 43200
+    header: token
+sys:
+  config:
+    qr-height: 300
+    qr-width: 300
+
+path:
+  imgTemp: /server/temp/img
+  docTemp: /server/temp/doc

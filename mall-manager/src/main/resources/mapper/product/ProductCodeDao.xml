@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dd.manager.modules.product.dao.ProductCodeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.dd.manager.modules.product.entity.ProductCodeEntity" id="productCodeMap">
+        <result property="id" column="id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productCode" column="product_code"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	
+	<select id="selectVOList" resultType="com.dd.manager.modules.product.vo.ProductCodeVO">
+		select t.product_code as code,t.create_time,(select count(1) from tb_check_log tcl where t.product_code = tcl.product_code) as check_count
+		from tb_product_code t
+		where 1=1
+		<if test="endTime != null and endTime != ''">
+			and t.create_time <![CDATA[ <=]]> #{endTime}
+		</if>
+		<if test="beginTime != null and beginTime != ''">
+			and t.create_time <![CDATA[ >=]]> #{beginTime}
+		</if>
+		order by t.create_time desc,check_count desc
+	</select>
+</mapper>
